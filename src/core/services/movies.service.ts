@@ -18,9 +18,10 @@ export class MovieService {
         return data ? ({...new MovieDto(data)}) : null
     }
 
-    getAllMovies = async () => {
-        const data = await this.moviesRepository.getAllMovies()
-        return data.map((p) => ({...new MovieDto(p)}))
+    getAllMovies = async (positions : {start:number, end:number}) => {
+        const data = await this.moviesRepository.getAllMovies(positions)
+
+        return data
     }
 
     setMovie = async (newMovie: CreateMovieDto) => {
@@ -29,7 +30,7 @@ export class MovieService {
     }
 
     updateMovie = async (dto: UpdateMovieDto) => {
-        const initialMovie = await this.moviesRepository.getMovieById(dto.id)
+        // const initialMovie = await this.moviesRepository.getMovieById(dto.id)
         const data = await this.moviesRepository.putMovie(dto)
         return new UpdateMovieDto(data)
     }

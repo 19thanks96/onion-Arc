@@ -1,0 +1,9 @@
+-- CreateEnum
+CREATE TYPE "Genre" AS ENUM ('ACTION', 'COMEDY', 'DRAMA', 'HORROR', 'SCIFI', 'ROMANCE', 'THRILLER', 'ANIMATION');
+
+-- AlterTable
+ALTER TABLE "Movies" ADD COLUMN     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN     "genre" "Genre",
+ADD COLUMN     "isAvailable" BOOLEAN DEFAULT true,
+ADD COLUMN     "rating" DOUBLE PRECISION,
+ADD COLUMN     "year" TIMESTAMP(3);

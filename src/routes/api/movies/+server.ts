@@ -4,10 +4,8 @@ import type {Response} from "@playwright/test";
 
 const moviesController = container.resolve(MoviesController)
 
-export const GET = async ()  =>
-    await moviesController.getMovies()
-
-
+export const GET = async (event)  =>
+    await moviesController.getMovies(event)
 
 export const POST  = async (e)  =>
     await moviesController.postMovie(e);

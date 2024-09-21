@@ -14,7 +14,24 @@ datasource db {
 }
 
 model Movies {
-  id          Int     @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   title       String
   description String?
+  isAvailable Boolean?  @default(true)
+  createdAt   DateTime? @default(now())
+  year        DateTime?
+  rating      Float?
+  genre       Genre?
+  // category
+}
+
+enum Genre {
+  ACTION
+  COMEDY
+  DRAMA
+  HORROR
+  SCIFI
+  ROMANCE
+  THRILLER
+  ANIMATION
 }

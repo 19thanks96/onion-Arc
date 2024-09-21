@@ -1,167 +1,94 @@
 <script lang="ts">
-    import type {MovieDto} from "$lib/common/cdtos/Movie.dto";
-    import { onMount, onDestroy } from 'svelte';
-    import {enhance} from '$app/forms';
     import FormPostMovie from "$lib/components/FormPostMovie.svelte";
+    import MovieRow from "$lib/components/MovieRow.svelte";
+    import {createPagination, melt} from "@melt-ui/svelte";
+    import {ChevronLeft, ChevronRight} from "lucide-svelte";
+
     export let data
+    // $:console.log(data)
+    const titles = ['Id', 'Tile', 'Description','Genre', 'Rating','Year', "Created", '']
+    const {
+        elements: { root, pageTrigger, prevButton, nextButton },
+        states: { pages, range },
+    } = createPagination({
+        count: data.movies.count,
+        perPage: 5,
+        defaultPage: 1,
+    });
 
-    let id:string;
-
-    let title: string[] = data.movies.data.map((movie: MovieDto) => movie.title);
-    let description: string[] = data.movies.data.map((movie: MovieDto) => movie.description);
-    const getMovies = async () => {
-        const movies = await fetch('/api/movies')
-        const allMovies: MovieDto = await movies.json()
-        data.movies = allMovies
-    }
-    const postMovies = async (params) => {
-        console.log(params)
-        const movies = await fetch('/api/movies', {method: 'POST', body: JSON.stringify(params)})
-        const data = await movies.json()
-        await getMovies()
-    }
-    const putMovie = async (params) => {
-        console.log(description)
-        const movies = await fetch('/api/movies', {method: 'PUT', body: JSON.stringify(params)})
-        const data = await movies.json()
-        await getMovies()
-    }
-
-    const redactorMovie = (index: number, redactor: boolean | undefined) => {
-        id = data.movies.data[index].id
-        data.movies.data[index].redactor = !redactor
-    }
-    const titles = ['Id', 'Tile', 'Description']
-    const deleteMovie = async (index: number) => {
-        const movies = await fetch('/api/movies', {method: 'DELETE', body: JSON.stringify({id:index})})
-        const res = await movies.json()
-        console.log(res)
-        await getMovies()
-    };
-    let isOpenForm : boolean = false;
-
-    const getFunc = async () => {
-        const resp = await fetch('https://api.themoviedb.org/3/movie/157336/videos?api_key=c529946f1d70c1251b016cde1ae7bbdb')
-        const res = await resp.json()
-        console.log(res)
-        const firstMovie = res.results[0].name.replace(/\s/g, '+')
-
-        const movie = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(firstMovie)}&key=${apiKey}&type=video&maxResults=1`)
-        const movieData = await movie.json();
-        console.log(movie, movieData);
-    }
-
-    function closePopoverOnClickOutside(event) {
-        if (isOpenForm && !event.target.closest('.popover-container') && !event.target.closest('button:not(.popover-container)')) {
-            isOpenForm = false;
+    range.subscribe(
+        async () => {
+            console.log("response")
+            const response = await fetch(`api/movies?start=${$range.start}&end=${$range.end}`, {method: 'GET'})
+            const resultResponse = await response.json()
+            data.movies = resultResponse.data
         }
-    }
+    )
 
-    // Добавляем обработчик события при монтировании компонента
-
-
-    onMount(() => {
-        document.addEventListener('click', closePopoverOnClickOutside);
-    });
-
-    onDestroy(() => {
-        document.removeEventListener('click', closePopoverOnClickOutside);
-    });
 </script>
-<table style='border-collapse: collapse; width: 100%'>
-    <thead>
-    <tr>
-        {#each titles as title}
-            <td>
-                {title}
-            </td>
-        {/each}
-    </tr>
-    </thead>
-    <tbody>
-    {#each data.movies.data as movie, index}
-        {@const id = data.movies.data[index].id}
-        {#if !movie.redactor}
+<nav
+        class="flex flex-col items-center gap-4"
+        aria-label="pagination"
+        use:melt={$root}
+>
 
-            <tr on:click={()=>redactorMovie(index, movie.redactor)}>
-                <td>{movie.id}</td>
-                <td>{movie.title}</td>
-                <td>{movie.description}</td>
-            </tr>
-        {:else}
-            <tr >
-                <td>{movie.id}</td>
-                <input bind:value={title[index]} type='text' placeholder={movie.title}/>
-                <input bind:value={description[index]} type='text' placeholder={movie.description}/>
-                <button on:click={() => {putMovie({id: id,title: title[index], description : description[index]})}}>change</button>
-                <button on:click={()=>redactorMovie(index, movie.redactor)}>close redactor</button>
-                <button on:click={() => {deleteMovie(movie.id, movie.redactor)}}>delete</button>
-
-            </tr>
-        {/if}
-    {/each}
-    </tbody>
-</table>
-
-<div class="container">
-    <div>
-        <button  on:click={() => {isOpenForm = !isOpenForm}}>add</button>
+<div class="m-[50px] w-fill-available rounded-[16px] bg-blue-100 caption-bottom text-sm h-fit gap-2 p-8">
+    <div class="flex justify-end items-end flex-row gap-8 h-11 my-2">
+        <h1 class="flex flex-row  flex-nowrap justify-center items-center font-[600] w-52 pl-4 h-full text-2xl text-magnum-700">
+            Movies
+            Table</h1>
+        <FormPostMovie {data}/>
     </div>
-
+    <div class=" rounded-[16px] bg-gray-300 caption-bottom text-sm h-fit gap-2 m-4 border-black border mb-2">
+        <table class=" w-fill-available rounded-[16px] bg-gray-300 caption-bottom text-sm h-fit gap-2 m-4 ">
+            <thead>
+            <tr>
+                {#each titles as title}
+                    <td class="py-4 pl-6 text-magnum-700 font-[600]">
+                        {title}
+                    </td>
+                {/each}
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan={8}>
+                    <hr class="w-fill-available border-black ">
+                </td>
+            </tr>
+            {#each data.movies.data as movie, index}
+                <MovieRow {movie} {index} />
+            {/each}
+            </tbody>
+        </table>
+    </div>
 </div>
+    <div class="flex items-center gap-2">
+        <button
+                class="grid h-8 items-center rounded-md bg-white px-3 text-sm text-magnum-900 shadow-sm
+      hover:opacity-75 disabled:cursor-not-allowed disabled:opacity-50 data-[selected]:bg-magnum-900
+      data-[selected]:text-white"
+                use:melt={$prevButton}><ChevronLeft class="size-4" /></button
+        >
+        {#each $pages as page (page.key)}
+            {#if page.type === 'ellipsis'}
+                <span>...</span>
+            {:else}
+                <button
+                        class="grid h-8 items-center rounded-md bg-white px-3 text-sm text-magnum-900 shadow-sm
+          hover:opacity-75 disabled:cursor-not-allowed disabled:opacity-50 data-[selected]:bg-magnum-900
+        data-[selected]:text-white"
+                        use:melt={$pageTrigger(page)}>{page.value}</button
+                >
+            {/if}
+        {/each}
+        <button
+                class="grid h-8 items-center rounded-md bg-white px-3 text-sm text-magnum-900 shadow-sm
+      hover:opacity-75 disabled:cursor-not-allowed disabled:opacity-50 data-[selected]:bg-magnum-900
+    data-[selected]:text-white"
+                use:melt={$nextButton}><ChevronRight class="size-4" /></button
+        >
+    </div>
+</nav>
 
-<FormPostMovie {isOpenForm}/>
 
-<style lang="css">
-    .container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        gap: 5rem;
-    }
-
-    .form-container {
-        position: relative;
-        width: 750px;
-        margin: 0 auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-    }
-
-    .form-group input,
-    .form-group textarea {
-        width: calc(100% - 20px);
-        padding: 8px;
-        font-size: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-    }
-
-    button:not(.popover-container) {
-        padding: 10px 15px;
-        font-size: 1rem;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background-color: #0056b3;
-    }
-</style>

@@ -11,26 +11,28 @@ export const actions = {
         const controllerResult = await moviesController.postMovie(event);
         return await controllerResult.json()
     },
-    putMovie: async (event: RequestEvent) => {
-        const controllerResult = await moviesController.putMovie(event)
-        return await controllerResult.json()
-    },
-    deleteMovie: async (event: RequestEvent) => {
-        const controllerResult = await moviesController.deleteMovie(event)
-        return await controllerResult.json()
-    }
 }
 export async function load({fetch}: PageServerLoadEvent) {
 
     const [resMovies] = await Promise.all([
-        fetch('/api/movies', {method: 'GET'}),
+        fetch('/api/movies?start=0&end=5', {method: 'GET'}),
     ])
     const [dataMovies,] = await Promise.all([
         resMovies.json(),
-
     ]);
 
-    return {
-        movies: dataMovies,
-    };
+    if(dataMovies.success === true) {
+        const count = dataMovies.data.count;
+        const sortedArray = dataMovies.data.data.sort((a: { id: number; }, b: { id: number; }) => a.id - b.id);
+
+        return {
+            movies: {
+                data: sortedArray,
+                success: dataMovies.success,
+                count: count
+            },
+        };
+    } else {
+        return dataMovies
+    }
 }

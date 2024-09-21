@@ -1,76 +1,84 @@
-<script lang="ts">
-    import {enhance} from '$app/forms';
-    export let isOpenForm = false
-    export let id: number | string = 4;
-    export let newTitle:string;
-    export let newDescription:string;
-    console.log(newTitle)
-</script>
+<!--<script lang="ts">-->
+<!--import {X} from "lucide-svelte";-->
+<!--import {enhance} from '$app/forms';-->
+<!--export let data:any;-->
+<!--export let melt:any;-->
+<!--export let fade,-->
+<!--    overlay,-->
+<!--    content,-->
+<!--    title,-->
+<!--    description,-->
+<!--    close,-->
+<!--    portalled,-->
+<!--    open-->
+<!--</script>-->
+<!--<div class="" use:melt={$portalled}>-->
+<!--    <div-->
+<!--            use:melt={$overlay}-->
+<!--            class="fixed inset-0 z-50 bg-black/50"-->
+<!--            transition:fade={{ duration: 150 }}-->
+<!--    />-->
+<!--    <div-->
+<!--            class="fixed left-1/2 top-1/2 z-50 max-h-[85vh] w-[90vw]-->
+<!--            max-w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-white-->
+<!--            p-6 shadow-lg"-->
 
-<button class="popover-container" tabindex="0"  style="position: fixed; width: 100%; height: 100%; background: rgb(0, 0, 0, 0.8); align-items: center; justify-content: center; top: 0; left: 0; right: 0; bottom: 0;{isOpenForm ? 'display: flex;' : 'display: none;'}">
-    <div>
-        <div  class="form-container">
-            <button on:click={() => {isOpenForm = !isOpenForm}} style="position: absolute;top: 5%;right: 5%;">close </button>
-            <h2>Put Movie</h2>
-            <form use:enhance={() => {}} action="?/putMovie"  method="POST">
-                <input type="hidden" name="_method" value="PUT" />
-                <input type="hidden" name="id" value={id} />
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input bind:value={newTitle} type='text' name="title" placeholder='title' required/>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea bind:value={newDescription} name="description" placeholder='description' required/>
-                </div>
-                <button type="submit">Put Movie</button>
-            </form>
-        </div>
-    </div>
-</button>
-
-<style lang="css">
-
-    .form-container {
-        position: relative;
-        width: 750px;
-        margin: 0 auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-    }
-
-    .form-group input,
-    .form-group textarea {
-        width: calc(100% - 20px);
-        padding: 8px;
-        font-size: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-    }
-
-    button:not(.popover-container) {
-        padding: 10px 15px;
-        font-size: 1rem;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background-color: #0056b3;
-    }
-</style>
+<!--            use:melt={$content}-->
+<!--    >-->
+<!--        <h2 use:melt={$title} class="m-0 text-lg font-medium text-black">-->
+<!--            Edit movie-->
+<!--        </h2>-->
+<!--        <p use:melt={$description} class="mb-5 mt-2 leading-normal text-zinc-600">-->
+<!--            Make changes to your movie here. Click save when you're done.-->
+<!--        </p>-->
+<!--        <form use:enhance={() => {-->
+<!--                $open = false-->
+<!--            }} action="?/putMovie" method="PUT">-->
+<!--            <input type="hidden" name="id" value={data.movie.data.id}/>-->
+<!--            <div class="mb-4 flex items-center gap-5">-->
+<!--                <label class="w-[90px] text-right text-black" for="title"> title </label>-->
+<!--                <input-->
+<!--                        class="inline-flex h-8 w-full flex-1 items-center justify-center-->
+<!--                    rounded-sm border border-solid px-3 leading-none text-black"-->
+<!--                        type='text' name="title" placeholder='title' required-->
+<!--                        value={data.movie.data.title}-->
+<!--                />-->
+<!--            </div>-->
+<!--            <div class="mb-4 flex items-center gap-5">-->
+<!--                <label class="w-[90px] text-right text-black" for="description">-->
+<!--                    description-->
+<!--                </label>-->
+<!--                <input-->
+<!--                        class="inline-flex h-8 w-full flex-1 items-center justify-center-->
+<!--                    rounded-sm border border-solid px-3 leading-none text-black"-->
+<!--                        type='text' name="description" placeholder='description'-->
+<!--                        value={data.movie.data.description}-->
+<!--                />-->
+<!--            </div>-->
+<!--            <div class="mt-6 flex justify-end gap-4">-->
+<!--                <button-->
+<!--                        use:melt={$close}-->
+<!--                        class="inline-flex h-8 items-center justify-center rounded-sm-->
+<!--                    bg-zinc-100 px-4 font-medium leading-none text-zinc-600"-->
+<!--                >-->
+<!--                    Cancel-->
+<!--                </button>-->
+<!--                <button type="submit"-->
+<!--                        class="inline-flex h-8 items-center justify-center rounded-sm-->
+<!--                    bg-magnum-100 px-4 font-medium leading-none text-magnum-900"-->
+<!--                >-->
+<!--                    Save changes-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <button-->
+<!--                    use:melt={$close}-->
+<!--                    aria-label="close"-->
+<!--                    class="absolute right-4 top-4 inline-flex h-6 w-6 appearance-none-->
+<!--                items-center justify-center rounded-full p-1 text-magnum-800-->
+<!--                hover:bg-magnum-100 focus:shadow-magnum-400"-->
+<!--            >-->
+<!--                <X class="size-4"/>-->
+<!--            </button>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</div>-->

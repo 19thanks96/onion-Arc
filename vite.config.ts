@@ -10,6 +10,6 @@ export default defineConfig(({ mode }) => {
 		plugins: [sveltekit()],
 		define: {
 			'import.meta.env': env
-		}
+		},
 	}
 });
