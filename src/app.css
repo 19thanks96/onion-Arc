@@ -8,3 +8,10 @@
         width: stretch;
     }
 }
+
+body{
+   background-color:  #181a1b;
+}
+body * {
+    color:white;
+}

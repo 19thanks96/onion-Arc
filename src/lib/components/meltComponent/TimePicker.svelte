@@ -123,7 +123,7 @@
     }
 
     [data-melt-popover-content] {
-        @apply z-10 min-w-[320px] rounded-lg bg-white shadow-sm;
+        @apply z-10 min-w-[320px] rounded-lg bg-[rgb(47,51,53)] shadow-sm;
     }
 
     [data-melt-popover-trigger] {
@@ -139,7 +139,7 @@
     }
 
     [data-melt-datefield-field] {
-        @apply mt-0.5 flex w-[75%] min-w-[160px] items-center rounded-lg border border-magnum-400/60 bg-white p-1.5 text-magnum-800 shadow-md;
+        @apply mt-0.5 flex w-[75%] min-w-[160px] items-center rounded-lg border border-magnum-400/60 bg-[rgb(47,51,53)] p-1.5 text-magnum-800 shadow-md;
     }
 
     [data-melt-datefield-field][data-invalid] {
@@ -159,7 +159,7 @@
     }
 
     [data-melt-calendar] {
-        @apply w-full rounded-lg bg-white p-3 text-magnum-700 shadow-sm;
+        @apply w-full rounded-lg bg-[rgb(47,51,53)] p-3 text-magnum-700 shadow-sm;
     }
 
     header {

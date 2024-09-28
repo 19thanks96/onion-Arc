@@ -1,6 +1,4 @@
 <script lang="ts">
-    import type {DotLottie as DotLottieType} from '@lottiefiles/dotlottie-svelte';
-    import {DotLottieSvelte} from '@lottiefiles/dotlottie-svelte';
     import {goto} from "$app/navigation";
 
     export let index: number
@@ -39,12 +37,13 @@
 </script>
 
 
-<tr id={'Cell-MovieID-'+ movie.id} class="cursor-pointer" on:click={()=>goto(movie.id)}
+<tr style="clip-path: inset(0 0 0 0 round 10px);"  id={'Cell-MovieID-'+ movie.id} class="cursor-pointer cell-row {indexRow || indexRow === 0 ? 'bg-[rgb(0,0,0,0.3)] rounded-xl' : 'bg-transparent'} " on:click={()=>goto(movie.id)}
     on:mouseenter={()=>{onMouseEnterRow(index)}}
     on:mouseleave={onMouseLeaveRow}>
-    <td data-type="id" class="py-4 pl-6">{movie.id}</td>
+    <td data-type="id" class="py-4 pl-6"><div class={movie.isAvailable ? 'available' : 'not-available'}>{movie.id}</div>
+    </td>
     <td data-type="title" class="py-4 pl-6">
-        <div class={movie.isAvailable ? 'available' : 'not-available'}>{movie.title}</div>
+        <div>{movie.title}</div>
     </td>
     <td data-type="description" class="py-4 pl-6">
         {#if movie.description}
@@ -59,25 +58,29 @@
         {/if}
     </td>
     <td data-type="rating" class="py-4 pl-6 flex">
-        {#each Array(10).fill(0) as _, index}
-            {#if index < movie.rating}
-                <span class='gold-star-{index} w-[40px] h-[40px] flex' style="font-size:200%;color:yellow;">
-<!--                    &starf;-->
-                    <lord-icon class="w-[40px] h-[40px] inline-block hover:text-black"
-                               src="https://media.lordicon.com/icons/wired/flat/237-star-rating.json"
-                               trigger="loop-on-hover">
-                    </lord-icon>
-                </span>
-            {:else}
-                <span class='empty-star-{index} w-[40px] h-[40px] flex' style="font-size:200%;color:black;">
-<!--                    &star;-->
-                    <lord-icon class="w-[40px] h-[40px] inline-block  animated-gradient  current-color"
-                               src="/lottie/star-rating-hover-wink.json"
-                               trigger="loop-on-hover">
-                    </lord-icon>
-                </span>
-            {/if}
-        {/each}
+        {#if movie.rating !== null}
+            {#each Array(10).fill(0) as _, index}
+                {#if index < movie.rating}
+                    <span class='gold-star-{index} w-[40px] h-[40px] flex' style="font-size:200%;color:yellow;">
+    <!--                    &starf;-->
+                        <lord-icon class="w-[40px] h-[40px] inline-block hover:text-black"
+                                   src="/lottie/237-star-rating.json"
+                                   trigger="loop-on-hover">
+                        </lord-icon>
+                    </span>
+                {:else}
+                    <span class='empty-star-{index} w-[40px] h-[40px] flex' style="font-size:200%;color:black;">
+    <!--                    &star;-->
+                        <lord-icon class="w-[40px] h-[40px] inline-block  animated-gradient  current-color"
+                                   src="/lottie/star-rating-hover-wink.json"
+                                   trigger="loop-on-hover">
+                        </lord-icon>
+                    </span>
+                {/if}
+            {/each}
+        {:else}
+            <div class="flex justify-center items-center w-full m-auto">-</div>
+        {/if}
     </td>
     <td data-type="year" class="py-4 pl-6">
         {#if movie?.year}
@@ -87,16 +90,16 @@
         {/if}
     </td>
     <td data-type="created" class="py-4 pl-6">{daysBetweenDates(movie.createdAt)} </td>
-    <td class=" flex justify-center transition-opacity duration-300 {(indexRow || indexRow === 0) && index === indexRow ? 'opacity-1':'opacity-0'}">
-        <button class="inline-flex items-center justify-center rounded-xl bg-white px-4 py-3 font-medium leading-none text-magnum-700 shadow hover:opacity-75 {'button-MovieID-'+movie.id} hover:text-magnum-700"
+    <td class=" p-[5px_5px_14px_10px] flex justify-center transition-opacity duration-300 {(indexRow || indexRow === 0) && index === indexRow ? 'opacity-1':'opacity-0'}">
+        <button class="inline-flex items-center bg-[rgb(0,0,0,0.5)] justify-center rounded-xl  px-4 py-3 font-medium leading-none text-magnum-700 shadow hover:opacity-75 {'button-MovieID-'+movie.id} hover:text-magnum-700"
                 on:click={() => {
                             deleteMovie(movie.id);
                             window.location.reload()
                             }}
         >
 
-            <lord-icon class="w-[30px] h-[30px] inline-block mr-[10px] current-color text-black hover:text-magnum-700"
-                       src="https://media.lordicon.com/icons/wired/gradient/1432-erase.json"
+            <lord-icon class="w-[30px] h-[30px] inline-block mr-[10px] current-color text-white hover:text-magnum-700"
+                       src="/lottie/1432-erase.json"
                        trigger="loop">
             </lord-icon>
 

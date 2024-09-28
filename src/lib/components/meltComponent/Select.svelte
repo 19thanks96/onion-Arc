@@ -27,7 +27,7 @@
 
 <div class="flex flex-col gap-1">
     <button
-            class="flex h-10 min-w-[220px] items-center justify-between rounded-lg bg-white px-3 py-2
+            class="flex h-10 min-w-[220px] items-center justify-between rounded-lg bg-[rgb(47,51,53)] px-3 py-2
   text-magnum-700 shadow transition-opacity hover:opacity-90"
             use:melt={$trigger}
             aria-label="Food"
@@ -38,7 +38,7 @@
     {#if $open}
         <div
                 class=" z-[100] flex max-h-[300px] flex-col
-    overflow-y-auto rounded-lg bg-white p-1
+    overflow-y-auto rounded-lg bg-[rgb(47,51,53)] p-1
     shadow focus:!ring-0"
                 use:melt={$menu}
                 transition:fade={{ duration: 150 }}
@@ -46,7 +46,7 @@
             {#each Object.entries(options) as [key, arr]}
                 <div use:melt={$group(key)}>
                         <div
-                                class="relative cursor-pointer rounded-lg py-1 pl-8 pr-4 text-neutral-800
+                                class="relative cursor-pointer rounded-lg py-1 pl-8 pr-4 text-white
               hover:bg-magnum-100 focus:z-10
               focus:text-magnum-700
               data-[highlighted]:bg-magnum-200 data-[highlighted]:text-magnum-900

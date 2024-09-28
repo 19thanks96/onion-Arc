@@ -1,1 +1,1 @@
-<script src="https://cdn.lordicon.com/lordicon.js"></script>
+// <script src="https://cdn.lordicon.com/lordicon.js"></script>

@@ -46,6 +46,7 @@
             genre: formData.get('genre') as Genre,
         }
         const validation = schemasMovieCreation.safeParse(new CreateMovieDto(newMovie))
+        console.log(validation, 'validation')
         if (!validation.success) {
             errors = validation.error.formErrors.fieldErrors;
             cancel();
@@ -61,7 +62,7 @@
             updateData();
             $CreateUpdateMovieModalState.errors = [{
                 title: 'Added movie',
-                description: 'The movie was added successfully!',
+                description: 'Congratulation! The movie was added successfully!',
                 color: 'bg-green-500',
             }]
             invalidateAll()
@@ -84,11 +85,11 @@
 
     <button
             use:melt={$trigger}
-            class="inline-flex items-center justify-center rounded-xl bg-white px-4 py-3
+            class="inline-flex items-center justify-center rounded-xl bg-[rgb(0,0,0,0.75)] px-4 py-3
   font-medium leading-none text-magnum-700 shadow hover:opacity-75 addNewMovie gap-[10px]"
     >
         <lord-icon
-                src="https://media.lordicon.com/icons/wired/gradient/180-envelope-mail-plus.json"
+                src="/lottie/180-envelope-mail-plus.json"
                 trigger="hover">
         </lord-icon>
         Add new movie by Form
@@ -105,14 +106,14 @@
         />
         <div
                 class="fixed left-1/2 top-1/2 z-50 max-h-[85vh] w-[90vw]
-            max-w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-white
+            max-w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-[rgb(34,37,39)]
             p-6 shadow-lg"
                 use:melt={$content}
         >
-            <h2 use:melt={$title} class="m-0 text-lg font-medium text-black">
+            <h2 use:melt={$title} class="m-0 text-lg font-medium text-white">
                 Add movie
             </h2>
-            <p use:melt={$description} class="mb-5 mt-2 leading-normal text-zinc-600">
+            <p use:melt={$description} class="mb-5 mt-2 leading-normal text-zinc-400">
                 Add movie. Click save when you're done.
             </p>
             <form
@@ -130,7 +131,7 @@
                            for="title">Title </label>
                     <input
                             class="inline-flex h-8 w-full flex-1 items-center justify-center
-                     border-solid px-3 leading-none rounded-lg border border-[rgba(247,177,85,0.6)] bg-white bg-opacity-100 p-[0.375rem] text-[rgb(150,69,22)] text-opacity-100 shadow"
+                     border-solid px-3 leading-none rounded-lg border border-[rgba(247,177,85,0.6)] bg-[rgb(47,51,53)] bg-opacity-100 p-[0.375rem] text-[rgb(150,69,22)] text-opacity-100 shadow"
                             type='text' name="title" placeholder='film name' required
                             bind:value={$CreateUpdateMovieModalState.title}
                     />
@@ -146,7 +147,7 @@
                     </label>
                     <input
                             class="inline-flex h-8 w-full flex-1 items-center justify-center
-                     border-solid px-3 leading-none  rounded-lg border border-[rgba(247,177,85,0.6)] bg-white bg-opacity-100 p-[0.375rem] text-[rgb(150,69,22)] text-opacity-100 shadow"
+                     border-solid px-3 leading-none  rounded-lg border border-[rgba(247,177,85,0.6)] bg-[rgb(47,51,53)] bg-opacity-100 p-[0.375rem] text-[rgb(150,69,22)] text-opacity-100 shadow"
                             type='text' name="description" placeholder='movie description '
                             bind:value={$CreateUpdateMovieModalState.description}
                     />
@@ -161,7 +162,7 @@
                     </label>
                     <input
                             class="inline-flex h-8 w-full flex-1 items-center justify-center
-                     border-solid px-3 leading-none  rounded-lg border border-[rgba(247,177,85,0.6)] bg-white bg-opacity-100 p-[0.375rem] text-[rgb(150,69,22)] text-opacity-100 shadow"
+                     border-solid px-3 leading-none  rounded-lg border border-[rgba(247,177,85,0.6)] bg-[rgb(47,51,53)] bg-opacity-100 p-[0.375rem] text-[rgb(150,69,22)] text-opacity-100 shadow"
                             type='number' name="rating" placeholder='must be greater than 0 less than 5'
                             bind:value={$CreateUpdateMovieModalState.rating} min="0" max="10"
                     />
@@ -199,13 +200,14 @@
                     <button
                             use:melt={$close}
                             class="inline-flex h-8 items-center justify-center rounded-sm
-                    bg-zinc-100 px-4 font-medium leading-none text-zinc-600"
+                    bg-[rgb(0,0,0,0.7)] px-4 font-medium leading-none text-zinc-600"
                     >
                         Cancel
                     </button>
                     <button type="submit"
                             class="inline-flex h-8 items-center justify-center rounded-sm
-                    bg-magnum-100 px-4 font-medium leading-none text-magnum-900"
+                            bg-[rgb(47,51,51)]
+                    hover:bg-magnum-100 px-4 font-medium leading-none text-magnum-900"
                     >
                         Save changes
                     </button>
@@ -213,9 +215,9 @@
                 <button
                         use:melt={$close}
                         aria-label="close"
-                        class="absolute right-4 top-4 inline-flex h-6 w-6 appearance-none
+                        class="absolute right-4 top-4 inline-flex h-6 w-6 appearance-none bg-[rgb(47,51,53)]
                 items-center justify-center rounded-full p-1 text-magnum-800
-                hover:bg-magnum-100 focus:shadow-magnum-400"
+                hover:bg-magnum-500 focus:shadow-magnum-400"
                 >
                     <X class="size-4"/>
                 </button>

@@ -12,10 +12,11 @@ export const actions = {
         return await controllerResult.json()
     },
 }
+
 export async function load({fetch}: PageServerLoadEvent) {
 
     const [resMovies] = await Promise.all([
-        fetch('/api/movies?start=0&end=5', {method: 'GET'}),
+        fetch('/api/movies?start=0&end=5&filters=Id&sortOrder=0', {method: 'GET'}),
     ])
     const [dataMovies,] = await Promise.all([
         resMovies.json(),
@@ -23,11 +24,10 @@ export async function load({fetch}: PageServerLoadEvent) {
 
     if(dataMovies.success === true) {
         const count = dataMovies.data.count;
-        const sortedArray = dataMovies.data.data.sort((a: { id: number; }, b: { id: number; }) => a.id - b.id);
 
         return {
             movies: {
-                data: sortedArray,
+                data: dataMovies.data.data,
                 success: dataMovies.success,
                 count: count
             },

@@ -4,39 +4,40 @@ import type {CreateMovieEntity, MovieEntity} from "../entities/Movie.entity";
 import {CreateMovieDto} from "$lib/common/cdtos/CreateMovie.dto";
 
 interface IMoviesRepository {
-    getAllMovies(): Promise<MovieEntity[]>,
-    getMovieById(id: number): Promise<MovieEntity[]>,
-    setMovie(movie: FormData): Promise<MovieEntity>,
-    putMovie(movieEntity: MovieEntity): Promise<Response>,
+    getAllMovies(positions:{start:number, end:number, filters: string, sortOrder : string}) : Promise<{data: MovieEntity[],  count: number }>,
+    getMovieById(id: number): Promise<MovieEntity | null>,
+    setMovie(movie: CreateMovieDto): Promise<CreateMovieEntity>,
+    putMovie(movieEntity: MovieEntity): Promise<MovieEntity>,
     deleteMovie(id: number): Promise<MovieEntity>,
 }
 
 @injectable()
 export default class MoviesRepository implements IMoviesRepository {
 
-    getAllMovies = async (positions) : Promise<MovieEntity[] & { count: number }> => {
-
-        // Get the total count of movies
+    getAllMovies = async (positions:{start:number, end:number, filters: string, sortOrder : string}) : Promise<{data: MovieEntity[],  count: number }> => {
         const count = await prisma.movies.count();
 
-        // Get the list of movies with pagination
-        const movies = await prisma.movies.findMany({
+        const movies  = await prisma.movies.findMany({
+            orderBy: {
+                [positions.filters]: positions.sortOrder,
+            },
             skip: positions.start,
             take: positions.end - positions.start,
         });
 
-        // Return both movies and count
         return { data: movies, count };
     };
 
-    getMovieById = async (id: number): Promise<MovieEntity | null> => {
-        return prisma.movies.findFirst({
-            where: {id}
+    getMovieById = async (id: number): Promise<MovieEntity | null> =>
+        await prisma.movies.findFirst({
+            where: {
+                id
+            }
         });
-    }
 
-    setMovie = async (movie: CreateMovieDto): Promise<MovieEntity> => {
-        return await prisma.movies.create({
+
+    setMovie = async (movie: CreateMovieDto): Promise<CreateMovieEntity> =>
+         await prisma.movies.create({
             data: {
                 title: movie.title,
                 description: movie?.description,
@@ -46,11 +47,10 @@ export default class MoviesRepository implements IMoviesRepository {
                 genre: movie?.genre,
             },
         });
-    }
 
-    putMovie = async (movieEntity: MovieEntity): Promise<Response>  => {
-        console.log(movieEntity)
-        return await prisma.movies.update({
+
+    putMovie = async (movieEntity: MovieEntity)  =>
+         await prisma.movies.update({
             where: {
                 id: movieEntity.id,
             },
@@ -63,12 +63,11 @@ export default class MoviesRepository implements IMoviesRepository {
                 isAvailable: movieEntity.isAvailable,
             },
         });
-    }
 
-    // @ts-ignore
-    deleteMovie = async (id: number)=> {
-        return await prisma.movies.delete({
+
+
+    deleteMovie = async (id: number)=>
+         await prisma.movies.delete({
             where: {id: id}
         })
-    }
 }

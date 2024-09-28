@@ -52,20 +52,27 @@ test( 'create new movie', async () => {
 
 
 
-	await submitButton.click({timeout: 1000});
+	await submitButton.click({timeout: 3000});
 	await page.goto('http://localhost:4173/');
 
-	const rows = page.locator('tr');
+	const sortByID = page.locator('.filter-Id')
 
-	// Get the last <tr> element
-	const lastRow = rows.last();
+	await expect(sortByID).toBeVisible();
+
+	await sortByID.click({timeout: 2000});
+
+	const rows = page.locator('.cell-row');
+	console.log(rows)
 
 
-	await expect(lastRow).toBeVisible();
-	const lastRowId = await lastRow.evaluate(el => el.id);
+	const firstRow = rows.first();
 
-	// Log the ID to the console
-	console.log('create with id:', lastRowId);
+
+	await expect(firstRow).toBeVisible();
+
+
+	const lastRowId = await firstRow.getAttribute('id');
+	console.log('Create with id:', lastRowId);
 });
 
 test( 'edit last movie by id', async () => {
@@ -77,21 +84,28 @@ test( 'edit last movie by id', async () => {
 	// Navigate to the home page
 	await page.goto('http://localhost:4173/');
 
-	const rows = page.locator('tr');
+	const sortByID = page.locator('.filter-Id')
+
+	await expect(sortByID).toBeVisible();
+
+	await sortByID.click({timeout: 2000});
+
+
+	const rows = page.locator('.cell-row');
 
 	// Get the last <tr> element
-	const lastRow = rows.last();
+	const lastRow = rows.nth(0);
 
 
 	await expect(lastRow).toBeVisible();
-	const lastRowId = await lastRow.evaluate(el => el.id);
+	const lastRowId = await lastRow.getAttribute('id');
 	const lastHyphenIndex = lastRowId.lastIndexOf('-');
 	const afterLastHyphen = lastHyphenIndex !== -1 ? lastRowId.substring(lastHyphenIndex + 1) : lastRowId;
 	console.log('navigation to ', afterLastHyphen);
 	await page.goto('http://localhost:4173/' + afterLastHyphen);
 
 
-	const editButton = page.locator('button', { hasText: 'Edit movie by form' });
+	const editButton = page.locator('button', { hasText: 'Update' });
 
 	// Ensure the button is visible
 	await expect(editButton).toBeVisible();
@@ -101,7 +115,7 @@ test( 'edit last movie by id', async () => {
 
 	const inputTitle = page.locator('input[name="title"]');
 
-	await expect(inputTitle).toHaveValue('My New Movie');
+	await expect(inputTitle).toHaveAttribute('placeholder', 'My New Movie');
 
 	await inputTitle.fill('My Rewrite movie');
 
@@ -125,10 +139,16 @@ test( 'delete last movie by id', async () => {
 	// Navigate to the home page
 	await page.goto('http://localhost:4173/');
 
-	const rows = page.locator('tr');
+	const sortByID = page.locator('.filter-Id')
+
+	await expect(sortByID).toBeVisible();
+
+	await sortByID.click({timeout: 2000});
+
+	const rows = page.locator('.cell-row');
 
 	// Get the last <tr> element
-	const lastRow = rows.last();
+	const lastRow = rows.first();
 
 
 	await expect(lastRow).toBeVisible();

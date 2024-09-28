@@ -4,17 +4,19 @@ export interface MovieEntity  {
     id: number;
     title: string;
     description?: string | null;
+    createdAt?: Date | null | undefined;
     year?: Date | null;
-    rating?: number | string,
-    isAvailable?: boolean | string;
-    genre?: keyof typeof Genre;
+    rating?: number  | null,
+    isAvailable?:  boolean | null;
+    genre?: keyof typeof Genre | null;
 }
 
 export interface CreateMovieEntity  {
     title: string;
     description?: string | null;
+    createdAt: Date | null;
     year?: Date | null;
-    rating?: number | null,
-    isAvailable?: boolean | string;
-    genre?: keyof typeof Genre;
+    rating?: number  | null,
+    isAvailable?:  boolean | null;
+    genre?: keyof typeof Genre | null;
 }
